@@ -21,15 +21,25 @@ public class Rocket : MonoBehaviour
 
 	void Update()
 	{
-		ProcessInput();
+		Thrust();
+		Rotate();
 	}
 
-	private void ProcessInput()
+	private void OnCollisionEnter(Collision other)
 	{
-		if(Input.GetKey(KeyCode.Space))
+		if(other.gameObject.tag == "Hostile")
+		{
+			Destroy(gameObject);
+		}
+	}
+
+	private void Thrust()
+	{
+		if (Input.GetKey(KeyCode.Space))
 		{
 			rb.AddRelativeForce(Vector3.up * thrustForce);
-			if(!ac.isPlaying)
+
+			if (!ac.isPlaying)
 			{
 				ac.Play();
 			}
@@ -38,6 +48,10 @@ public class Rocket : MonoBehaviour
 		{
 			ac.Stop();
 		}
+	}
+	private void Rotate()
+	{
+		rb.angularVelocity = Vector3.zero;	//remove rotation due to physics
 
 		if (Input.GetKey(KeyCode.A))
 		{
